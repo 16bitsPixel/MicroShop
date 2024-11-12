@@ -63,7 +63,8 @@ public class Routes {
     @Bean
     public RouterFunction<ServerResponse> fallbackRoute() {
         return route("fallbackRoute")
-                .GET("/fallbackRoute", request -> ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE).body("Service Unavailable"))
+                .GET("/fallbackRoute", request -> ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body("Service Unavailable, please try again later"))
                 .build();
     }
 }
