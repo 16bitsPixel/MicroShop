@@ -7,12 +7,10 @@ export class Product {
     id!: string
   @Field()
     name!: string
-  @Field(() => [String]) 
-    description!: string[]
+  @Field()
+    description!: string
   @Field()
     price!: number
-  @Field()
-    rating!: number
-  @Field(() => [String])
-    image!: string[]
+  @Field({nullable: true})
+    image?: string
 }

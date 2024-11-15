@@ -18,7 +18,6 @@ import { ProductService } from "./service"
 export class ProductResolver {
   @Query(() => [Product])
   async product(): Promise<Product[]> {
-    // console.log(`User requesting books is: ${request.user.id})`)
     return new ProductService().getAll()
   }
 
@@ -30,10 +29,4 @@ export class ProductResolver {
     return new ProductService().get(productId);
   }
 
-  @Query(() => [Product])
-  async searchProducts(
-    @Arg("query") query: string
-  ): Promise<Product[]> {
-    return new ProductService().search(query);
-  }
 }

@@ -2,14 +2,8 @@ import type { Product } from './schema'
 
 export class ProductService{
   async getAll(): Promise<Product[]> {
-    return [
-        {
-            'id' : '1',
-            'name': 'test',
-            'price': 100,
-            'image': ['https://m.media-amazon.com/images/I/510jrZgVARL._AC_UF894,1000_QL80_.jpg']
-        }
-    ];
+    const res = await fetch(`http://localhost:9000/api/product`)
+    return res.json();
   }
 
   async get(productId: string): Promise<Product> {

@@ -10,11 +10,10 @@ interface ProductCardProps {
   id: string;
   name: string;
   price: number;
-  //rating: number;
   image: string;
 }
 
-export default function ProductCard({id, name, price, /*rating,*/ image}: ProductCardProps) {
+export default function ProductCard({id, name, price, image}: ProductCardProps) {
   const [isHovered, setIsHovered] = React.useState(false);
 
   const handleMouseEnter = () => {
