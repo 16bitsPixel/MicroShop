@@ -8,7 +8,6 @@ interface ProductImageProps {
 }
 
 export function ProductImage({ image }: ProductImageProps) {
-  const [currentImage, setCurrentImage] = React.useState(image);
   const [isHovered, setIsHovered] = React.useState(false);
 
   const handleMouseEnter = () => {
@@ -32,7 +31,7 @@ export function ProductImage({ image }: ProductImageProps) {
       >
         <CardMedia
           component="img"
-          image={currentImage}
+          image={image}
           sx={styles.cardMedia}
           aria-label="cardImage"
         />
@@ -42,28 +41,29 @@ export function ProductImage({ image }: ProductImageProps) {
 }
 
 const styles = {
-  // The Card itself is fixed at 400x400
+  // The Card itself adjusts based on the screen size
   card: {
-    width: '500px',
-    height: '500px',
-    borderRadius: '8px',  // Optional: Add border radius for rounded corners
-    overflow: 'hidden',   // Ensure content doesn't overflow the card boundary
+    width: { xs: '300px', md: '500px', xl: '800px' }, // Responsive width
+    height: { xs: '300px', md: '500px', xl: '800px' }, // Responsive height
+    borderRadius: '8px', // Optional: Add border radius for rounded corners
+    overflow: 'hidden', // Ensure content doesn't overflow the card boundary
   },
   // The Box for the image, which will scale to fill the Card
   cardMediaWrapper: {
     position: 'relative',
-    width: '100%',        // Take the full width of the Card
-    height: '100%',       // Take the full height of the Card
-    overflow: 'hidden',   // Hide overflowed content
+    width: '100%', // Take the full width of the Card
+    height: '100%', // Take the full height of the Card
+    overflow: 'hidden', // Hide overflowed content
   },
   // Styling the image itself to fit inside the Box
   cardMedia: {
-    objectFit: 'cover',   // Ensures image fills the box without distortion (can be 'contain' if desired)
+    objectFit: 'cover', // Ensures image fills the box without distortion
     width: '100%',
     height: '100%',
     transition: 'transform 0.3s ease-in-out',
   },
+  // Zoom-in effect for the image when hovered
   cardMediaHovered: {
-    transform: 'scale(1.1)',  // Slight zoom-in effect when hovered
+    transform: 'scale(1.1)', // Slight zoom-in effect when hovered
   },
 };
