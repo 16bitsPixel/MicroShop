@@ -57,7 +57,7 @@ export default function ProductCard({id, name, price, image}: ProductCardProps) 
 
 const styles = {
   cardMedia: {
-    objectFit: 'contain',
+    objectFit: 'cover',
     transition: 'transform 0.3s ease-in-out',
   },
   cardMediaHovered: {

@@ -7,7 +7,7 @@ export class ProductService{
   }
 
   async get(productId: string): Promise<Product> {
-    const res = await fetch(`http://localhost:3012/api/v0/product/product/?productId=${productId}`)
+    const res = await fetch(`http://localhost:9000/api/product/${productId}`)
     return res.json();
   }
 
