@@ -5,8 +5,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
+import { useKeycloak } from '@react-keycloak/web';
 
 export default function Header() {
+  const {keycloak, initialized} = useKeycloak();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -27,7 +30,24 @@ export default function Header() {
             </Typography>
           </Link>
           <Box sx={{ flexGrow: 1 }} />
-          <Button color="inherit">Login</Button>
+
+          {!keycloak.authenticated && (
+            <Button 
+              color="inherit"
+              onClick={() => keycloak.login()}
+            >
+              Login
+            </Button>
+          )}
+
+          {!!keycloak.authenticated && (
+            <Button 
+              color="inherit"
+              onClick={() => keycloak.logout()}
+            >
+              Logout
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
