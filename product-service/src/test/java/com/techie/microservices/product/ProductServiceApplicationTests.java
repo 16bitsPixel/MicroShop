@@ -37,7 +37,8 @@ class ProductServiceApplicationTests {
 					{
 						"name": "iPhone 15",
 						"description": "iPhone 15 is a smartphone from Apple",
-						"price": 1000
+						"price": 1000,
+						"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-finish-select-202309-6-1inch-blue_FMT_WHH?wid=640&hei=246&fmt=jpeg&qlt=95&.v=1692923776464"
 					}
 				""";
 
@@ -51,7 +52,8 @@ class ProductServiceApplicationTests {
 				.body("id", Matchers.notNullValue())
 				.body("name", Matchers.equalTo("iPhone 15"))
 				.body("description", Matchers.equalTo("iPhone 15 is a smartphone from Apple"))
-				.body("price", Matchers.equalTo(1000));
+				.body("price", Matchers.equalTo(1000))
+				.body("image", Matchers.equalTo("https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-finish-select-202309-6-1inch-blue_FMT_WHH?wid=640&hei=246&fmt=jpeg&qlt=95&.v=1692923776464"));
 	}
 
 }

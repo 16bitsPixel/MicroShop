@@ -4,6 +4,7 @@ import com.techie.microservices.product.dto.ProductRequest;
 import com.techie.microservices.product.dto.ProductResponse;
 import com.techie.microservices.product.model.Product;
 import com.techie.microservices.product.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,16 +22,29 @@ public class ProductService {
                 .name(productRequest.name())
                 .description(productRequest.description())
                 .price(productRequest.price())
+                .image(productRequest.image())
                 .build();
         productRepository.save(product);
         log.info("Product created successfully");
-        return new ProductResponse(product.getId(), product.getName(), product.getDescription(), product.getPrice());
+        return new ProductResponse(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getImage());
     }
 
     public List<ProductResponse> getAllProducts() {
         return productRepository.findAll()
                 .stream()
-                .map(product -> new ProductResponse(product.getId(), product.getName(), product.getDescription(), product.getPrice()))
+                .map(product -> new ProductResponse(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getImage()))
                 .toList();
+    }
+
+    public ProductResponse getProduct(String id) {
+        return productRepository.findById(id)
+                .map(product -> new ProductResponse(
+                        product.getId(),
+                        product.getName(),
+                        product.getDescription(),
+                        product.getPrice(),
+                        product.getImage()
+                ))
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + id));
     }
 }

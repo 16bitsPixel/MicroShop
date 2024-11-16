@@ -18,6 +18,7 @@ public class SecurityConfig {
         return httpSecurity.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(freeResourceUrls).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/product").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/product/*").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .build();
