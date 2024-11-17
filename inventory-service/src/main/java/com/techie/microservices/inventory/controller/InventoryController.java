@@ -1,5 +1,6 @@
 package com.techie.microservices.inventory.controller;
 
+import com.techie.microservices.inventory.dto.InventoryRequest;
 import com.techie.microservices.inventory.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,5 +17,25 @@ public class InventoryController {
     @ResponseStatus(HttpStatus.OK)
     public boolean isInStock(@RequestParam String skuCode, @RequestParam Integer quantity) {
         return inventoryService.isInStock(skuCode, quantity);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void updateStock(@PathVariable String id, @RequestParam Integer quantity) {
+        inventoryService.updateStock(id, quantity);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public String stockInventory(@RequestBody InventoryRequest inventoryRequest) {
+        System.out.println(inventoryRequest);
+        inventoryService.stockInventory(inventoryRequest.skuCode(), inventoryRequest.quantity());
+        return "Inventory Stocked Successfully";
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Integer getQuantity(@PathVariable String id) {
+        return inventoryService.getQuantity(id);
     }
 }
