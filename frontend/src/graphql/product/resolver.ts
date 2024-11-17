@@ -1,18 +1,9 @@
-/*
-#######################################################################
-#
-# Copyright (C) 2022-2024 David C. Harrison. All right reserved.
-#
-# You may not use, distribute, publish, or modify this code without 
-# the express written permission of the copyright holder.
-#
-#######################################################################
-*/
+import { Query, Resolver, Arg, Mutation, Ctx} from "type-graphql"
 
-import { Query, Resolver, Arg} from "type-graphql"
-
-import { Product } from "./schema"
+import { Product, ProductRequest } from "./schema"
 import { ProductService } from "./service"
+
+import { NextApiRequest } from "next"
 
 @Resolver()
 export class ProductResolver {
@@ -27,6 +18,14 @@ export class ProductResolver {
     // @Ctx() request: NextApiRequest
   ): Promise<Product | undefined> {
     return new ProductService().get(productId);
+  }
+
+  @Mutation(() => Product, { nullable: true })
+  async createProduct(
+    @Arg("productRequest") productRequest: ProductRequest,
+    @Arg("token", {nullable: true}) token: string,
+  ): Promise<Product | undefined> {
+    return new ProductService().create(productRequest, token);
   }
 
 }

@@ -26,6 +26,9 @@ export class ProductRequest {
   @Field()
   price!: number;
 
+  @Field()
+  quantity!: number;
+
   @Field({ nullable: true })
   image?: string;
 }
