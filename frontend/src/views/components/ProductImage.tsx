@@ -57,7 +57,7 @@ const styles = {
   },
   // Styling the image itself to fit inside the Box
   cardMedia: {
-    objectFit: 'cover', // Ensures image fills the box without distortion
+    objectFit: 'contain', // Ensures image fills the box without distortion
     width: '100%',
     height: '100%',
     transition: 'transform 0.3s ease-in-out',

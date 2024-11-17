@@ -2,12 +2,14 @@ import React from 'react';
 import Head from 'next/head'
 import { Fragment } from 'react'
 import { useRouter } from 'next/router';
+import { useKeycloak } from '@react-keycloak/web'; // Assuming you're using this hook for Keycloak
 
 import { ProductView } from '@/views/Product';
 
 export default function ProductPage() {
   const router = useRouter();
   const { id } = router.query;
+  const { keycloak, initialized } = useKeycloak();
 
   return (
     <Fragment>
@@ -15,7 +17,7 @@ export default function ProductPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <ProductView id={id}/>
+      <ProductView id={id} token = {keycloak.token} />
     </Fragment>
   )
 }

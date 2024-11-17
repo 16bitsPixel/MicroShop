@@ -73,7 +73,6 @@ export class ProductService{
         // Return the product response (or combined data if necessary)
         return productResponse.json();
     } catch (error) {
-        console.error('Error in create method:', error.toString());
         return undefined;
     }
 }

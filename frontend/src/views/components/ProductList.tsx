@@ -45,7 +45,7 @@ export default function ProductList() {
   }, []);
 
     return (
-      <Box sx = {{marginTop: '5rem', marginLeft: '1rem', marginRight: '1rem'}}>
+      <Box sx = {{marginTop: '1rem', marginLeft: '1rem', marginRight: '1rem'}}>
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
           {products.map((product: Product, index) => (
             <Grid item xs={2} sm={2} md={2} key={index}>

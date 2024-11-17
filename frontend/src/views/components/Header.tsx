@@ -52,7 +52,7 @@ export default function Header() {
           </Button>
           )}
 
-          {!!keycloak.authenticated && (
+          {!!keycloak.authenticated && keycloak.hasRealmRole('vendor') && (
             <Box sx = {{display: 'flex', gap: 5}}>
               <Link href={`/create`} passHref legacyBehavior>
                 <Button 
@@ -74,6 +74,29 @@ export default function Header() {
                 </Button>
               </Link>
 
+              <Button 
+                color="inherit"
+                onClick={() => keycloak.logout()}
+              >
+                <Typography
+                  noWrap
+                  component="a" // Ensures it renders as an anchor tag
+                  sx={{
+                    color: 'inherit', // Inherits the AppBar text color (white)
+                    textDecoration: 'none', // Removes underline styling
+                    cursor: 'pointer', // Ensures it behaves like a clickable link
+                    fontWeight: 'bold',
+                    fontSize: {xs: '1rem', xl: '1.2rem'}
+                  }}
+                >
+                  Logout
+                </Typography>
+              </Button>
+            </Box>
+          )}
+
+          {!!keycloak.authenticated && !keycloak.hasRealmRole('vendor') && (
+            <Box sx = {{display: 'flex', gap: 5}}>
               <Button 
                 color="inherit"
                 onClick={() => keycloak.logout()}

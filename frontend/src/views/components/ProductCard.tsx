@@ -29,7 +29,8 @@ export default function ProductCard({id, name, price, image}: ProductCardProps) 
       <Link href={`/product?id=${id}`}>
         <CardMedia
           component="img"
-          height="200"
+          height = "200"
+          maxHeight="200"
           image={image}
           alt={name}
           sx={{
@@ -42,7 +43,7 @@ export default function ProductCard({id, name, price, image}: ProductCardProps) 
         />
       </Link>
       <CardContent>
-        <Typography sx={{ overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }} component="div">
+        <Typography variant ="h6" sx={{ overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, fontWeight: 'bold' }} component="div">
           {name}
         </Typography>
       </CardContent>
@@ -57,7 +58,7 @@ export default function ProductCard({id, name, price, image}: ProductCardProps) 
 
 const styles = {
   cardMedia: {
-    objectFit: 'cover',
+    objectFit: 'contain',
     transition: 'transform 0.3s ease-in-out',
   },
   cardMediaHovered: {

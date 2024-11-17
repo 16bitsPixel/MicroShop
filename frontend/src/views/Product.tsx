@@ -7,6 +7,7 @@ import { ProductImage } from './components/ProductImage';
 import { Divider, Box, Grid, Typography, Button, TextField, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { OrderRequest } from '@/graphql/order/schema';
 
 interface FetchProductParams {
   id: string | string[] | undefined;
@@ -70,11 +71,40 @@ const fetchQuantity = ({ id, setInventory }: FetchQuantityParams) => {
     });
 };
 
+const createOrder = (newOrder: OrderRequest, token: string) => {
+    const query = {
+      query: `mutation createOrder {
+        createOrder(orderRequest: {
+          skuCode: "${newOrder.skuCode}",
+          quantity: ${newOrder.quantity},
+          price: ${newOrder.price}
+        }, token: "${token}") {
+          id, orderNumber, quantity
+        }
+      }`,
+    };
+    fetch('/api/graphql', {
+      method: 'POST',
+      body: JSON.stringify(query),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        console.log(JSON.stringify);
+        return res.json();
+      })
+      .catch((e) => {
+        alert(e.toString());
+      });
+};
+
 interface ProductProps {
   id: string | string[] | undefined;
+  token: string | undefined;
 }
 
-export function ProductView({ id }: ProductProps) {
+export function ProductView({ id, token }: ProductProps) {
   const [product, setProduct] = React.useState<Product | undefined>(undefined);
   const [quantity, setQuantity] = React.useState(1);
   const [inventory, setInventory] = React.useState(0);
@@ -86,7 +116,19 @@ export function ProductView({ id }: ProductProps) {
   }, [id]);
 
   const handlePurchase = () => {
-    alert(`Purchasing ${quantity} of ${product?.name}`);
+    if (!token) {
+      alert(`Must be logged in to purchase`);
+    } else if (quantity > inventory) {
+      alert(`Not enough in stock to make purchase!`)
+    } else {
+      alert(`Purchasing ${quantity} of ${product?.name}`);
+      const newPurchase = {
+        skuCode: id,
+        quantity: quantity,
+        price: product.price * quantity
+      };
+      createOrder(newPurchase, token);
+    }
   };
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {

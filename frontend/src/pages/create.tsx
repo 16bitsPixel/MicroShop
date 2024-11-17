@@ -11,7 +11,7 @@ export default function CreatePage() {
 
   // Check if Keycloak is initialized and the user is authenticated
   useEffect(() => {
-    if (initialized && !keycloak?.authenticated) {
+    if (initialized && !keycloak?.authenticated || initialized && keycloak?.authenticated && !keycloak.hasRealmRole('vendor')) {
       // Redirect to home page if not authenticated
       router.push('/');
     }
