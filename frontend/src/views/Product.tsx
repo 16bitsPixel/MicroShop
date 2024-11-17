@@ -40,6 +40,36 @@ const fetchProduct = ({ id, setProduct }: FetchProductParams) => {
     });
 };
 
+interface FetchQuantityParams {
+  id: string | string[] | undefined;
+  setInventory: any;
+}
+
+const fetchQuantity = ({ id, setInventory }: FetchQuantityParams) => {
+  const query = {
+    query: `query GetQuantity {
+      quantity(productId: "${id}")
+    }`,
+  };
+  fetch('/api/graphql', {
+    method: 'POST',
+    body: JSON.stringify(query),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((json) => {
+      setInventory(json.data.quantity);
+    })
+    .catch((e) => {
+      alert(e.toString());
+      setInventory(0);
+    });
+};
+
 interface ProductProps {
   id: string | string[] | undefined;
 }
@@ -47,9 +77,12 @@ interface ProductProps {
 export function ProductView({ id }: ProductProps) {
   const [product, setProduct] = React.useState<Product | undefined>(undefined);
   const [quantity, setQuantity] = React.useState(1);
+  const [inventory, setInventory] = React.useState(0);
+
 
   React.useEffect(() => {
     fetchProduct({ id, setProduct });
+    fetchQuantity({id, setInventory });
   }, [id]);
 
   const handlePurchase = () => {
@@ -123,7 +156,7 @@ export function ProductView({ id }: ProductProps) {
 
                 {/* Product Stock */}
                 <Typography variant="h5" sx={{ color: 'green', marginBottom: 2, fontSize: { xs: '1.5rem', xl: '2.7rem' } }}>
-                  3 Left
+                  {inventory} Left In Stock
                 </Typography>
               </Box>
 

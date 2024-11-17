@@ -28,4 +28,12 @@ export class ProductResolver {
     return new ProductService().create(productRequest, token);
   }
 
+  @Query(() => Number)
+  async quantity(
+    @Arg("productId") productId: string,
+    // @Ctx() request: NextApiRequest
+  ): Promise<number> {
+    return new ProductService().getQuantity(productId);
+  }
+
 }

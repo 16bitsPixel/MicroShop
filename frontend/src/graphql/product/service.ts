@@ -11,33 +11,73 @@ export class ProductService{
     return res.json();
   }
 
-  async create(productRequest: ProductRequest, token: string): Promise<Product | undefined> {
-    console.log("got here");
+  async getQuantity(productId: string): Promise<number> {
+    const res = await fetch(`http://localhost:9000/api/inventory/${productId}`)
+    return res.json();
+  }
 
-    // separate quantity out
+  async create(productRequest: ProductRequest, token: string): Promise<Product | undefined> {
+    // Separate product creation request
     const myProductRequest = {
-      "name": productRequest.name,
-      "description": productRequest.description,
-      "price": productRequest.price,
-      "image": productRequest.image
+        name: productRequest.name,
+        description: productRequest.description,
+        price: productRequest.price,
+        image: productRequest.image,
     };
 
-    const res = await fetch(`http://localhost:9000/api/product`, {
-      method: 'POST',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }),
-      body: JSON.stringify(myProductRequest),
-    }).then((res) => {
-      return res.json();
-    })
-    .catch((e) => {
-      console.log(e.toString());
-    });
+    try {
+        // First API call: Create product
+        const productResponse = await fetch(`http://localhost:9000/api/product`, {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            }),
+            body: JSON.stringify(myProductRequest),
+        });
 
-    return res;
-  }
+        if (!productResponse.ok) {
+            throw new Error(`Failed to create product: ${productResponse.statusText}`);
+        }
+
+        const productData = await productResponse.json();
+
+        // Extract the product ID for inventory creation
+        const productId = productData?.id;
+        if (!productId) {
+            throw new Error('Product ID is missing in the response');
+        }
+
+        // Prepare inventory request
+        const myInventoryRequest = {
+            skuCode: productId,
+            quantity: productRequest.quantity,
+        };
+
+        // Second API call: Create inventory
+        const inventoryResponse = await fetch(`http://localhost:9000/api/inventory`, {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            }),
+            body: JSON.stringify(myInventoryRequest),
+        });
+
+        if (!inventoryResponse.ok) {
+            throw new Error(`Failed to create inventory: ${inventoryResponse.statusText}`);
+        }
+
+        const inventoryData = await inventoryResponse.json();
+
+        // Return the product response (or combined data if necessary)
+        return productResponse.json();
+    } catch (error) {
+        console.error('Error in create method:', error.toString());
+        return undefined;
+    }
+}
+
 
 }
 
