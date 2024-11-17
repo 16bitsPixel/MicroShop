@@ -20,6 +20,7 @@ public class Routes {
 
     @Bean
     public RouterFunction<ServerResponse> productServiceRoute() {
+        System.out.println("MADE IT TO GATEWAY");
         return route("product_service")
                 .route(RequestPredicates.path("/api/product"), HandlerFunctions.http("http://localhost:8080"))
                 .route(RequestPredicates.path("/api/product/{id}"), HandlerFunctions.http("http://localhost:8080"))
@@ -61,6 +62,7 @@ public class Routes {
     public RouterFunction<ServerResponse> inventoryServiceRoute() {
         return route("inventory_service")
                 .route(RequestPredicates.path("/api/inventory"), HandlerFunctions.http("http://localhost:8082"))
+                .route(RequestPredicates.path("/api/inventory/{id}"), HandlerFunctions.http("http://localhost:8082"))
                 .filter(CircuitBreakerFilterFunctions.circuitBreaker("inventoryServiceCircuitBreaker",
                         URI.create("forward:/fallbackRoute")))
                 .build();
