@@ -3,9 +3,11 @@ package com.techie.microservices.order.service;
 import com.techie.microservices.order.client.InventoryClient;
 import com.techie.microservices.order.dto.OrderRequest;
 import com.techie.microservices.order.dto.OrderResponse;
+import com.techie.microservices.order.event.OrderPlacedEvent;
 import com.techie.microservices.order.model.Order;
 import com.techie.microservices.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -16,6 +18,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final InventoryClient inventoryClient;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     public OrderResponse placeOrder(OrderRequest orderRequest) {
         var isProductInStock = inventoryClient.isInStock(orderRequest.skuCode(), orderRequest.quantity());
@@ -30,6 +33,11 @@ public class OrderService {
 
             // save order to Order Repository
             Order savedOrder = orderRepository.save(order);
+
+            // send message to kafka topic
+            // orderNumber, email
+            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(order.getOrderNumber(), orderRequest.userDetails().email());
+            kafkaTemplate.send("order-placed", orderPlacedEvent);
 
             // update the amount in stock
             inventoryClient.updateStock(orderRequest.skuCode(), orderRequest.quantity());
