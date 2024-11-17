@@ -77,7 +77,12 @@ const createOrder = (newOrder: OrderRequest, token: string) => {
         createOrder(orderRequest: {
           skuCode: "${newOrder.skuCode}",
           quantity: ${newOrder.quantity},
-          price: ${newOrder.price}
+          price: ${newOrder.price},
+          userDetails: {
+            email: "${newOrder.userDetails.email}",
+            firstName: "${newOrder.userDetails.firstName}",
+            lastName: "${newOrder.userDetails.lastName}"
+          }
         }, token: "${token}") {
           id, orderNumber, quantity
         }
@@ -102,9 +107,10 @@ const createOrder = (newOrder: OrderRequest, token: string) => {
 interface ProductProps {
   id: string | string[] | undefined;
   token: string | undefined;
+  userDetails: any;
 }
 
-export function ProductView({ id, token }: ProductProps) {
+export function ProductView({ id, token, userDetails }: ProductProps) {
   const [product, setProduct] = React.useState<Product | undefined>(undefined);
   const [quantity, setQuantity] = React.useState(1);
   const [inventory, setInventory] = React.useState(0);
@@ -125,7 +131,12 @@ export function ProductView({ id, token }: ProductProps) {
       const newPurchase = {
         skuCode: id,
         quantity: quantity,
-        price: product.price * quantity
+        price: product.price * quantity,
+        userDetails: {
+          email: userDetails.email,
+          firstName: userDetails.firstName,
+          lastName: userDetails.lastName
+        }
       };
       createOrder(newPurchase, token);
     }
