@@ -1,7 +1,8 @@
 import { Field, ObjectType, InputType } from "type-graphql"
 // import { Matches } from "class-validator";
 
-@ObjectType('userdetails')
+@ObjectType('UserDetailsObject')
+@InputType('UserDetailsInput')
 export class UserDetails {
   @Field()
     email!: string
@@ -35,8 +36,6 @@ export class OrderRequest {
     quantity!: number
   @Field()
     price!: number
-  /*
   @Field()
     userDetails!: UserDetails
-  */
 }
