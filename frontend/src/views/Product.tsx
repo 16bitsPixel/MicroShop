@@ -115,7 +115,6 @@ export function ProductView({ id, token, userDetails }: ProductProps) {
   const [quantity, setQuantity] = React.useState(1);
   const [inventory, setInventory] = React.useState(0);
 
-
   React.useEffect(() => {
     fetchProduct({ id, setProduct });
     fetchQuantity({id, setInventory });
